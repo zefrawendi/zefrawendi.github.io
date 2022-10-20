@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>prometheus on Zefrawendi' Site</title><link>https://zefrawendi.github.io/tags/prometheus/</link><description>Recent content in prometheus on Zefrawendi' Site</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 20 Oct 2022 09:52:48 +0800</lastBuildDate><atom:link href="https://zefrawendi.github.io/tags/prometheus/index.xml" rel="self" type="application/rss+xml"/><item><title>为NodeExport配置访问密码</title><link>https://zefrawendi.github.io/p/node_exporter_password/</link><pubDate>Thu, 20 Oct 2022 09:52:48 +0800</pubDate><guid>https://zefrawendi.github.io/p/node_exporter_password/</guid><description>&lt;p>Export采集指标的地址谁都可以访问，这里可以使用基础认证使用用户名密码方式去采集被监控端，也就是访问接口使用用户名密码提高安全性&lt;/p>
+&lt;h2 id="配置被监控端">配置被监控端&lt;/h2>
+&lt;p>这个配置文件里面是要访问我暴露的指标需要的用户名密码&lt;/p>
+&lt;p>用户名和密码，密码是采用了一定的加密方式的，而不是写明文&lt;/p>
+&lt;p>生成密码&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost ~&lt;span class="o">]&lt;/span>&lt;span class="c1"># yum install httpd-tools –y&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>下面就是输入123456之后加密的密码，将这个密码保存在配置文件当中&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost ~&lt;span class="o">]&lt;/span>&lt;span class="c1"># htpasswd -nBC 12 &amp;#39;&amp;#39; | tr -d &amp;#39;:\\\\n&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">New password:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Re-type new password:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$2&lt;/span>y&lt;span class="nv">$12$y4PaNc0UM0Jzi07jJf6zcuRFyp2GlH6F5rUKcE&lt;/span>.xk3Aug2khcqa7m
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>修改其配置文件&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost node_exporter&lt;span class="o">]&lt;/span>&lt;span class="c1"># vim config.yml&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost node_exporter&lt;span class="o">]&lt;/span>&lt;span class="c1"># cat config.yml&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">basic_auth_users:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> prometheus: &lt;span class="nv">$2&lt;/span>y&lt;span class="nv">$12$y4PaNc0UM0Jzi07jJf6zcuRFyp2GlH6F5rUKcE&lt;/span>.xk3Aug2khcqa7m
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>现在让export引用这个配置文件&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost node_exporter&lt;span class="o">]&lt;/span>&lt;span class="c1"># vim /usr/lib/systemd/system/node_exporter.service&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">ExecStart&lt;/span>&lt;span class="o">=&lt;/span>/usr/local/node_exporter/node_exporter --web.config&lt;span class="o">=&lt;/span>/usr/local/node_exporter/config.yml
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost node_exporter&lt;span class="o">]&lt;/span>&lt;span class="c1"># systemctl daemon-reload&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost node_exporter&lt;span class="o">]&lt;/span>&lt;span class="c1"># systemctl restart node_exporter&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>输入prometheus加上密码123456&lt;/p>
+&lt;p>&lt;img src="https://img-blog.csdnimg.cn/20210125112335914.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0NTU2NDE0,size_16,color_FFFFFF,t_70"
+loading="lazy"
+alt="https://img-blog.csdnimg.cn/20210125112335914.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0NTU2NDE0,size_16,color_FFFFFF,t_70"
+>&lt;/p>
+&lt;p>同时现在普罗米修斯没有配置，可以看到采集不了数据了&lt;/p>
+&lt;p>&lt;img src="https://img-blog.csdnimg.cn/20210125112449192.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0NTU2NDE0,size_16,color_FFFFFF,t_70"
+loading="lazy"
+alt="https://img-blog.csdnimg.cn/20210125112449192.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0NTU2NDE0,size_16,color_FFFFFF,t_70"
+>&lt;/p>
+&lt;h2 id="配置普罗米修斯">配置普罗米修斯&lt;/h2>
+&lt;p>启用用户名密码访问&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost prometheus&lt;span class="o">]&lt;/span>&lt;span class="c1"># vim /usr/local/prometheus/prometheus.yml&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - job_name: &lt;span class="s1">&amp;#39;webserver&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> basic_auth:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> username: prometheus
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> password: &lt;span class="m">123456&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> static_configs:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - targets: &lt;span class="o">[&lt;/span>&lt;span class="s1">&amp;#39;192.168.179.99:9100&amp;#39;&lt;/span>,&lt;span class="s1">&amp;#39;192.168.179.102:9100&amp;#39;&lt;/span>&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost prometheus&lt;span class="o">]&lt;/span>&lt;span class="c1"># ./promtool check config prometheus.yml&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Checking prometheus.yml
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> SUCCESS: &lt;span class="m">0&lt;/span> rule files found
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>可以看到数据可以正常采集了&lt;/p>
+&lt;p>&lt;img src="https://img-blog.csdnimg.cn/20210125112829583.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0NTU2NDE0,size_16,color_FFFFFF,t_70"
+loading="lazy"
+alt="https://img-blog.csdnimg.cn/20210125112829583.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0NTU2NDE0,size_16,color_FFFFFF,t_70"
+>&lt;/p></description></item></channel></rss>

@@ -1,4 +1,122 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Zefrawendi' Site</title><link>https://zefrawendi.github.io/</link><description>Recent content on Zefrawendi' Site</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 19 Oct 2022 15:44:48 +0800</lastBuildDate><atom:link href="https://zefrawendi.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Go Pretty</title><link>https://zefrawendi.github.io/p/go-pretty/</link><pubDate>Wed, 19 Oct 2022 15:44:48 +0800</pubDate><guid>https://zefrawendi.github.io/p/go-pretty/</guid><description>&lt;p>用于美化表格，列表，进度条，文本等的控制台输出&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Zefrawendi' Site</title><link>https://zefrawendi.github.io/</link><description>Recent content on Zefrawendi' Site</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 20 Oct 2022 09:52:48 +0800</lastBuildDate><atom:link href="https://zefrawendi.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>为NodeExport配置访问密码</title><link>https://zefrawendi.github.io/p/node_exporter_password/</link><pubDate>Thu, 20 Oct 2022 09:52:48 +0800</pubDate><guid>https://zefrawendi.github.io/p/node_exporter_password/</guid><description>&lt;p>Export采集指标的地址谁都可以访问，这里可以使用基础认证使用用户名密码方式去采集被监控端，也就是访问接口使用用户名密码提高安全性&lt;/p>
+&lt;h2 id="配置被监控端">配置被监控端&lt;/h2>
+&lt;p>这个配置文件里面是要访问我暴露的指标需要的用户名密码&lt;/p>
+&lt;p>用户名和密码，密码是采用了一定的加密方式的，而不是写明文&lt;/p>
+&lt;p>生成密码&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost ~&lt;span class="o">]&lt;/span>&lt;span class="c1"># yum install httpd-tools –y&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>下面就是输入123456之后加密的密码，将这个密码保存在配置文件当中&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost ~&lt;span class="o">]&lt;/span>&lt;span class="c1"># htpasswd -nBC 12 &amp;#39;&amp;#39; | tr -d &amp;#39;:\\\\n&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">New password:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Re-type new password:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$2&lt;/span>y&lt;span class="nv">$12$y4PaNc0UM0Jzi07jJf6zcuRFyp2GlH6F5rUKcE&lt;/span>.xk3Aug2khcqa7m
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>修改其配置文件&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost node_exporter&lt;span class="o">]&lt;/span>&lt;span class="c1"># vim config.yml&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost node_exporter&lt;span class="o">]&lt;/span>&lt;span class="c1"># cat config.yml&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">basic_auth_users:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> prometheus: &lt;span class="nv">$2&lt;/span>y&lt;span class="nv">$12$y4PaNc0UM0Jzi07jJf6zcuRFyp2GlH6F5rUKcE&lt;/span>.xk3Aug2khcqa7m
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>现在让export引用这个配置文件&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost node_exporter&lt;span class="o">]&lt;/span>&lt;span class="c1"># vim /usr/lib/systemd/system/node_exporter.service&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">ExecStart&lt;/span>&lt;span class="o">=&lt;/span>/usr/local/node_exporter/node_exporter --web.config&lt;span class="o">=&lt;/span>/usr/local/node_exporter/config.yml
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost node_exporter&lt;span class="o">]&lt;/span>&lt;span class="c1"># systemctl daemon-reload&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost node_exporter&lt;span class="o">]&lt;/span>&lt;span class="c1"># systemctl restart node_exporter&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>输入prometheus加上密码123456&lt;/p>
+&lt;p>&lt;img src="https://img-blog.csdnimg.cn/20210125112335914.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0NTU2NDE0,size_16,color_FFFFFF,t_70"
+loading="lazy"
+alt="https://img-blog.csdnimg.cn/20210125112335914.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0NTU2NDE0,size_16,color_FFFFFF,t_70"
+>&lt;/p>
+&lt;p>同时现在普罗米修斯没有配置，可以看到采集不了数据了&lt;/p>
+&lt;p>&lt;img src="https://img-blog.csdnimg.cn/20210125112449192.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0NTU2NDE0,size_16,color_FFFFFF,t_70"
+loading="lazy"
+alt="https://img-blog.csdnimg.cn/20210125112449192.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0NTU2NDE0,size_16,color_FFFFFF,t_70"
+>&lt;/p>
+&lt;h2 id="配置普罗米修斯">配置普罗米修斯&lt;/h2>
+&lt;p>启用用户名密码访问&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost prometheus&lt;span class="o">]&lt;/span>&lt;span class="c1"># vim /usr/local/prometheus/prometheus.yml&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - job_name: &lt;span class="s1">&amp;#39;webserver&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> basic_auth:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> username: prometheus
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> password: &lt;span class="m">123456&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> static_configs:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - targets: &lt;span class="o">[&lt;/span>&lt;span class="s1">&amp;#39;192.168.179.99:9100&amp;#39;&lt;/span>,&lt;span class="s1">&amp;#39;192.168.179.102:9100&amp;#39;&lt;/span>&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost prometheus&lt;span class="o">]&lt;/span>&lt;span class="c1"># ./promtool check config prometheus.yml&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Checking prometheus.yml
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> SUCCESS: &lt;span class="m">0&lt;/span> rule files found
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>可以看到数据可以正常采集了&lt;/p>
+&lt;p>&lt;img src="https://img-blog.csdnimg.cn/20210125112829583.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0NTU2NDE0,size_16,color_FFFFFF,t_70"
+loading="lazy"
+alt="https://img-blog.csdnimg.cn/20210125112829583.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0NTU2NDE0,size_16,color_FFFFFF,t_70"
+>&lt;/p></description></item><item><title>防火墙配置</title><link>https://zefrawendi.github.io/p/firewalld/</link><pubDate>Thu, 20 Oct 2022 09:45:48 +0800</pubDate><guid>https://zefrawendi.github.io/p/firewalld/</guid><description>&lt;h3 id="服务配置">&lt;strong>服务配置&lt;/strong>&lt;/h3>
+&lt;ul>
+&lt;li>&lt;strong>启动&lt;/strong>： &lt;code>systemctl start firewalld.service&lt;/code>&lt;/li>
+&lt;li>&lt;strong>查看状态&lt;/strong>： &lt;code>systemctl status firewalld.service&lt;/code>&lt;/li>
+&lt;li>&lt;strong>停止&lt;/strong>： &lt;code>systemctl disable firewalld.service&lt;/code>&lt;/li>
+&lt;li>&lt;strong>禁用&lt;/strong>： &lt;code>systemctl stop firewalld.service&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="三种策略">&lt;strong>三种策略&lt;/strong>&lt;/h3>
+&lt;ul>
+&lt;li>&lt;strong>ACCEPT&lt;/strong> 允许&lt;/li>
+&lt;li>&lt;strong>REJECT&lt;/strong> 拒绝&lt;/li>
+&lt;li>&lt;strong>DROP&lt;/strong> 丢弃&lt;/li>
+&lt;/ul>
+&lt;h3 id="1-查看">&lt;strong>1. 查看&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看激活的域&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --get-active-zones
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看开放的端口&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --zone&lt;span class="o">=&lt;/span>public --list-ports
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看开放的服务&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --zone&lt;span class="o">=&lt;/span>public --list-services
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看添加的规则&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --zone&lt;span class="o">=&lt;/span>public --list-rich-rules
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="2-添加端口">&lt;strong>2. 添加端口&lt;/strong>&lt;/h3>
+&lt;h3 id="常用命令">&lt;strong>常用命令&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#开放单个端口&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --zone&lt;span class="o">=&lt;/span>public --add-port&lt;span class="o">=&lt;/span>80/tcp --permanent
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 开放端口范围&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --zone&lt;span class="o">=&lt;/span>public --add-port&lt;span class="o">=&lt;/span>8388-8389/tcp --permanent
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 对 147.152.139.197 开放10000端口&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --permanent --add-rich-rule&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;rule family=&amp;#34;&lt;/span>ipv4&lt;span class="s2">&amp;#34; source address=&amp;#34;&lt;/span>147.152.139.197/32&lt;span class="s2">&amp;#34; port protocol=&amp;#34;&lt;/span>tcp&lt;span class="s2">&amp;#34; port=&amp;#34;&lt;/span>10000&lt;span class="s2">&amp;#34; accept&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 拒绝端口：&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --permanent --zone&lt;span class="o">=&lt;/span>public --add-rich-rule&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39; rule family=&amp;#34;ipv4&amp;#34; source address=&amp;#34;47.52.39.197/32&amp;#34; port protocol=&amp;#34;tcp&amp;#34; port=&amp;#34;10000&amp;#34; reject&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 开放全部端口给IP&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --permanent --zone&lt;span class="o">=&lt;/span>public --add-rich-rule&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39; rule family=&amp;#34;ipv4&amp;#34; source address=&amp;#34;192.168.0.1/32&amp;#34; accept&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 开放全部端口给网段&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --permanent --zone&lt;span class="o">=&lt;/span>public --add-rich-rule&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39; rule family=&amp;#34;ipv4&amp;#34; source address=&amp;#34;192.168.0.0/16&amp;#34; accept&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="3-添加服务">&lt;strong>3. 添加服务&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看全部支持的服务&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --get-service
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看开放的服务&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --list-service
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 添加服务,添加https&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --add-service&lt;span class="o">=&lt;/span>https --permanent
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 修改对应的配置文件是/etc/firewalld/zones/public.xml&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="4-移除端口">&lt;strong>4. 移除端口&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 移除添加的端口(其它的增加的策略也是将add改为remove即可)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --zone&lt;span class="o">=&lt;/span>public --remove-port&lt;span class="o">=&lt;/span>80/tcp --permanent
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="5-重载配置">&lt;strong>5. 重载配置&lt;/strong>&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 对路由规则进行修改后，需要重新加载规则才能使规则生效&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --reload
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="实战应用">&lt;strong>实战应用&lt;/strong>&lt;/h3>
+&lt;h3 id="1限制ssh访问仅允许白名单ip登录">&lt;strong>(1)限制ssh访问，仅允许白名单IP登录&lt;/strong>&lt;/h3>
+&lt;p>也可以通过在/etc/host.deny里面配置来实现&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 取消默认开启的没有访问限制的ssh服务，让ssh服务默认情况下拒绝连接&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --permanent --remove-service&lt;span class="o">=&lt;/span>ssh
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 允许特定ip或ip段访问22端口的ssh服务&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --permanent --add-rich-rule&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;rule family=&amp;#34;ipv4&amp;#34; source address=&amp;#34;192.168.1.0/24&amp;#34; port protocol=&amp;#34;tcp&amp;#34; port=&amp;#34;22&amp;#34; accept&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 重载firewall配置，使其生效&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">firewall-cmd --reload
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Go Pretty</title><link>https://zefrawendi.github.io/p/go-pretty/</link><pubDate>Wed, 19 Oct 2022 15:44:48 +0800</pubDate><guid>https://zefrawendi.github.io/p/go-pretty/</guid><description>&lt;p>用于美化表格，列表，进度条，文本等的控制台输出&lt;/p>
 &lt;p>&lt;a class="link" href="https://github.com/jedib0t/go-pretty" target="_blank" rel="noopener"
 >jedib0t/go-pretty: Table-writer and more in golang! (github.com)&lt;/a>&lt;/p>
 &lt;h2 id="table">table&lt;/h2>
@@ -49,7 +167,7 @@ class="gallery-image"
 data-flex-grow="204"
 data-flex-basis="491px"
 >&lt;/p>
-&lt;p>Render同时也支持渲染html、csv等&amp;hellip;&lt;/p></description></item><item><title>About</title><link>https://zefrawendi.github.io/about/</link><pubDate>Wed, 19 Oct 2022 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/about/</guid><description>&lt;ul>
+&lt;p>Render同时也支持渲染html、csv等&amp;hellip;&lt;/p></description></item><item><title>关于我</title><link>https://zefrawendi.github.io/about/</link><pubDate>Wed, 19 Oct 2022 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/about/</guid><description>&lt;ul>
 &lt;li>代码：Python/Go &lt;span style="opacity: 0.3">&lt;del>很菜的水平&lt;/del>&lt;/span>&lt;/li>
 &lt;li>运维：Linux/Openstack/Kubernetes &lt;span style="opacity: 0.3">&lt;del>不出问题就好&lt;/del>&lt;/span>&lt;/li>
 &lt;li>游戏：喜欢刷刷刷游戏的运气型卡牌玩家&lt;/li>
@@ -61,4 +179,4 @@ data-flex-basis="491px"
 &lt;li>&lt;a class="link" href="https://space.bilibili.com/fps30" target="_blank" rel="noopener"
 >Bilibili&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="mailto:Deern@qq.com" >Deern@qq.com&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Archives</title><link>https://zefrawendi.github.io/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/archives/</guid><description/></item><item><title>Search</title><link>https://zefrawendi.github.io/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/search/</guid><description/></item><item><title>开发</title><link>https://zefrawendi.github.io/categories/dev/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/categories/dev/</guid><description>&lt;img src="https://zefrawendi.github.io/categories/dev/dev.jpeg" alt="Featured image of post 开发" /></description></item><item><title>生活</title><link>https://zefrawendi.github.io/categories/life/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/categories/life/</guid><description/></item><item><title>娱乐</title><link>https://zefrawendi.github.io/categories/games/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/categories/games/</guid><description>&lt;img src="https://zefrawendi.github.io/categories/games/cover.jpg" alt="Featured image of post 娱乐" /></description></item><item><title>运维</title><link>https://zefrawendi.github.io/categories/ops/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/categories/ops/</guid><description>&lt;img src="https://zefrawendi.github.io/categories/ops/cover.png" alt="Featured image of post 运维" /></description></item></channel></rss>
+&lt;/ul></description></item><item><title>归档</title><link>https://zefrawendi.github.io/archives/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/archives/</guid><description/></item><item><title>开发</title><link>https://zefrawendi.github.io/categories/dev/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/categories/dev/</guid><description>&lt;img src="https://zefrawendi.github.io/categories/dev/dev.jpeg" alt="Featured image of post 开发" /></description></item><item><title>生活</title><link>https://zefrawendi.github.io/categories/life/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/categories/life/</guid><description/></item><item><title>搜索</title><link>https://zefrawendi.github.io/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/search/</guid><description/></item><item><title>娱乐</title><link>https://zefrawendi.github.io/categories/games/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/categories/games/</guid><description>&lt;img src="https://zefrawendi.github.io/categories/games/cover.jpg" alt="Featured image of post 娱乐" /></description></item><item><title>运维</title><link>https://zefrawendi.github.io/categories/ops/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zefrawendi.github.io/categories/ops/</guid><description>&lt;img src="https://zefrawendi.github.io/categories/ops/cover.png" alt="Featured image of post 运维" /></description></item></channel></rss>
