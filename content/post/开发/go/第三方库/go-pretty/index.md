@@ -1,7 +1,7 @@
 ---
 title: "Go Pretty"
 date: 2022-10-19T15:44:48+08:00
-lastmod: 2022-10-19T15:44:48+08:00
+lastmod: 2022-10-20T09:44:48+08:00
 draft: false
 description: "go pretty库"
 categories: ["开发"]

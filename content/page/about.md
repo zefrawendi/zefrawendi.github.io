@@ -1,12 +1,10 @@
 ---
-title: About
-description: 关于我.
+title: "关于我"
+description: "关于我"
 date: '2022-10-19'
-aliases:
-  - about-us
-  - about-hugo
-  - contact
 license: CC BY-NC-ND
+layout: "about"
+slug: "about"
 lastmod: '2022-10-19'
 menu:
   main: 
