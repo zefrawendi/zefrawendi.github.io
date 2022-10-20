@@ -1,14 +1,17 @@
 ---
-title: "hugo stack配置"
-date: 2022-10-19T14:49:05+08:00
-draft: true
-image: "conver.png"
+title: "hugo配置"
+date: 2022-10-19T15:00:00+08:00
+lastmod: 2021-06-02T18:25:17+08:00
+draft: false
+image: "cover.png"
 description: "使用hugo搭建个人博客"
-categories: ["others"]
+categories: ["开发"]
 tags: ["hugo","blog"]
-slug: "hugo-stack"
+slug: "hugo"
 ---
-## 配置hugo stack
+
+
+## 安装hugo并配置主题
 
 ### 安装hugo
 ```shell

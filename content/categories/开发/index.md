@@ -1,6 +1,6 @@
 ---
-title: dev
+title: 开发
 description: "编程、代码、软件、开源相关"
 slug: dev
-image: "cover.webp"
+image: "dev.jpeg"
 ---

@@ -45,7 +45,7 @@ params:
 
     sidebar:
         emoji: 🍥
-        subtitle: We shall meet in the place where there is no darkness.
+        subtitle: 日常记录
         avatar:
             enabled: true
             local: true
@@ -122,12 +122,6 @@ menu:
           url: https://github.com/zefrawendi
           params:
               icon: brand-github
-
-        # - identifier: twitter
-        #   name: Twitter
-        #   url: https://twitter.com/fps30
-        #   params:
-        #     icon: brand-twitter
 
 related:
     includeNewer: true

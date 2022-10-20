@@ -1,10 +1,11 @@
 ---
 title: "Go Pretty"
 date: 2022-10-19T15:44:48+08:00
-draft: true
+lastmod: 2022-10-19T15:44:48+08:00
+draft: false
 description: "go pretty库"
-categories: ["dev"]
-tags: ["go","third-party-library"]
+categories: ["开发"]
+tags: ["go","第三方库"]
 slug: "go-pretty"
 ---
 
