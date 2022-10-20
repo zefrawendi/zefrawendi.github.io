@@ -37,7 +37,7 @@ params:
 
     footer:
         since: 2022
-        customText:
+        customText: "Made with ❤️ by Zefrawendi"
 
     dateFormat:
         published: Jan 02, 2006
