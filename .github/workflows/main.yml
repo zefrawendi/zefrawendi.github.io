@@ -21,12 +21,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
-          submodules: recursive
+          submodules: true
+          fetch-depth: 0
 
       - name: Hugo setup
         # You may pin to the exact commit or the version.
         # uses: peaceiris/actions-hugo@2e89aa66d0093e4cd14751b3028fc1a179452c2e
-        uses: peaceiris/actions-hugo@v2.4.13
+        uses: peaceiris/actions-hugo@v2
         with:
           # The Hugo version to download (if necessary) and use. Example: 0.58.2
           hugo-version: latest
@@ -34,7 +35,7 @@ jobs:
           extended: true
       
       - name: Build Site
-        run: hugo
+        run: hugo --minify
 
       - name: Algolia Uploader
         # You may pin to the exact commit or the version.
