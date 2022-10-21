@@ -6,7 +6,8 @@ draft: false
 description: "go pretty库"
 categories: ["开发"]
 tags: ["go","第三方库"]
-slug: "go-pretty"
+slug: "go_pretty"
+image: "ops.png"
 ---
 
 用于美化表格，列表，进度条，文本等的控制台输出
@@ -57,7 +58,7 @@ func main() {
 ```
 运行可以在终端中得到
 
-![](image-20221019165612601.png)
+![](ops.png)
 
 
 

@@ -3,10 +3,10 @@ title: "防火墙配置"
 date: 2022-10-20T09:45:48+08:00
 lastmod: 2022-10-20T09:45:48+08:00
 draft: false
+image: "test.jpeg"
 description: "firewalld防火墙配置"
 categories: ["运维"]
 tags: ["centos","防火墙"]
-slug: "firewalld"
 ---
 
 ### **服务配置**
