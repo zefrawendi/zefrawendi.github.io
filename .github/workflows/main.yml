@@ -1,4 +1,4 @@
-name: CD
+name: deploy to GitHub Pages And upload to Algolia
 
 on:
   # after main.yml is done
@@ -34,3 +34,17 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+
+      - name: Upload to Algolia
+        # You may pin to the exact commit or the version.
+        # uses: wangchucheng/algolia-uploader@2146c50bde2441041f9727c2b89accebcc998c74
+        uses: wangchucheng/algolia-uploader@v0.1.0
+        with:
+          # Application ID of Algolia
+          app_id: UUU68T8E14
+          # Admin API Key of Algolia
+          admin_key: ${{ secrets.ALGOLIA_ADMIN_KEY }}
+          # Index name of Algolia
+          index_name: hugo
+          # Index file path
+          index_file_path: public/index.json
