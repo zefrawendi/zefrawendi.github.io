@@ -25,10 +25,6 @@ jobs:
           hugo-version: "latest"
           extended: true
 
-      - name: Edit theme footer
-        run: |
-          sed -i '/{{ T "footer./d' themes/hugo-theme-stack/layouts/partials/footer/footer.html
-
       - name: Build
         run: hugo --minify
 
