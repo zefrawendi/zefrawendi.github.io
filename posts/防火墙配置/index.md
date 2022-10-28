@@ -97,6 +97,3 @@ firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="192
 firewall-cmd --reload
 ```
 
-![image](test.jpeg)
-
-
