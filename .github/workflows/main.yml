@@ -33,14 +33,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
 
-      - name: Clear old index in Algolia
-        uses: algolia/algoliasearch-action@v1
-        with:
-          application_id: UUU68T8E14
-          api_key: ${{ secrets.ALGOLIA_ADMIN_KEY }}
-          action: clear-index
-          index_name: hugo
-
       - name: Upload to Algolia
         # You may pin to the exact commit or the version.
         # uses: wangchucheng/algolia-uploader@2146c50bde2441041f9727c2b89accebcc998c74
