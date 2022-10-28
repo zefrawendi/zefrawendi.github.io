@@ -7,7 +7,6 @@ description: "go pretty库"
 categories: ["开发"]
 tags: ["go","第三方库"]
 slug: "go_pretty"
-image: "ops.png"
 ---
 
 用于美化表格，列表，进度条，文本等的控制台输出
