@@ -1,12 +1,10 @@
 name: deploy to GitHub Pages And upload to Algolia
 
 on:
-  # after main.yml is done
-  workflow_run:
-    workflows: ["CI"]
-    branches: [master]
-    types:
-      - completed
+  # after every push to master
+  push:
+    branches:
+      - master
 
 jobs:
   deploy:
