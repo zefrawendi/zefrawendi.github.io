@@ -1,5 +1,5 @@
 ---
-title: "context"
+title: "go context"
 subtitle: "Go标准库：context"
 date: 2022-10-28T09:47:50+08:00
 lastmod: 2022-10-28T09:47:50+08:00
@@ -11,7 +11,7 @@ categories: ["开发"]
 tags: ["context"]
 ---
 
-## 一、为什么使用Context
+## 一、为什么使用context
 
 ### （1）go的扛把子
 
@@ -27,7 +27,7 @@ func main() {
 
 通过简单的go func(){}，go可以快速生成新的协程并运行。
 
-### （2）想象一个没有Context的世界
+### （2）想象一个没有context的世界
 
 go里面常用于协程间通信和管理的有channel和sync包。比如channel可以通知协程做特定操作（退出，阻塞等），sync可以加锁和同步。
 
@@ -38,26 +38,28 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"sync"
 )
 
 func main() {
+	// 通过一个chan来控制goroutine的执行
 	closed := make(chan struct{})
-
-	for i := 0; i < 2; i++ {
+	wg := sync.WaitGroup{}
+	for i := 0; i < 200; i++ {
+		wg.Add(1)
 		// do something
-		go func(i int) {
+		go func(i int, wg *sync.WaitGroup) {
 			select {
 			case <-closed:
 				fmt.Printf("%d Closed\n", i)
+				wg.Done()
 			}
-		}(i)
+		}(i, &wg)
 	}
 
 	// 发送指令关闭所有协程
 	close(closed)
-
-	time.Sleep(1 * time.Second)
+	wg.Wait()
 }
 ```
 
@@ -70,43 +72,46 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
 func main() {
+	// 通过一个chan来控制goroutine的执行
 	closed := make(chan struct{})
-
-	for i := 0; i < 2; i++ {
-		go func(i int) {
-			// do something
+	wg := sync.WaitGroup{}
+	for i := 0; i < 200; i++ {
+		wg.Add(1)
+		// do something
+		go func(i int, wg *sync.WaitGroup) {
 			select {
 			case <-closed:
-				fmt.Printf("%d Timeout\n", i)
+				fmt.Printf("%d Closed\n", i)
+				wg.Done()
 			}
-		}(i)
+		}(i, &wg)
 	}
 
 	// 加个时间条件
 	ta := time.After(5 * time.Second)
-
 	select {
 	case <-ta:
 		close(closed)
 	}
 
-	time.Sleep(1 * time.Second)
+	wg.Wait()
 }
 ```
 
-### （3）用Context精简代码
+### （3）用context精简代码
 
 上面的代码已经够简单了，但是还是显得有些复杂。比如每次都要在协程内部增加对channel的判断，也要在外部设置关闭条件。试想一下，如果程序要限制的是总时长，而不是单个操作的时长，这样每个操作要限制多少时间也是个难题。
 
 ![图片](640.png)
 
-这个时候就轮到Context登场了。Context顾名思义是协程的上下文，主要用于跟踪协程的状态，可以做一些简单的协程控制，也能记录一些协程信息。
+这个时候就轮到context登场了。context顾名思义是协程的上下文，主要用于跟踪协程的状态，可以做一些简单的协程控制，也能记录一些协程信息。
 
-下面试着用Context改造下前面的例子：
+下面试着用context改造下前面的例子：
 
 ```go
 package main
@@ -114,19 +119,23 @@ package main
 import (
 	"context"
 	"fmt"
+	"sync"
 	"time"
 )
 
 func main() {
 	// 空的父context
-	pctx := context.TODO()
-
+	parentCtx := context.Background()
 	// 子context（携带有超时信息），cancel函数（可以主动触发取消）
-	//ctx, cancel := context.WithTimeout(pctx, 5*time.Second)
-	ctx, _ := context.WithTimeout(pctx, 5*time.Second)
+	//ctx, cancel := context.WithTimeout(parentCtx, 5*time.Second)
+	ctx, _ := context.WithTimeout(parentCtx, 5*time.Second)
+
+	wg := sync.WaitGroup{}
 
 	for i := 0; i < 2; i++ {
+		wg.Add(1)
 		go func(i int) {
+			defer wg.Done()
 			// do something
 
 			// 大部分工具库内置了对ctx的判断，下面的部分几乎可以省略
@@ -140,17 +149,17 @@ func main() {
 	// 调用cancel会直接关闭ctx.Done()返回的管道，不用等到超时
 	//cancel()
 
-	time.Sleep(6 * time.Second)
+	wg.Wait()
 }
 ```
 
-通过Context可以进一步简化控制代码，且更为友好的是，大多数go库，如http、各种db driver、grpc等都内置了对ctx.Done()的判断，我们只需要将ctx传入即可。
+通过context可以进一步简化控制代码，且更为友好的是，大多数go库，如http、各种db driver、grpc等都内置了对ctx.Done()的判断，我们只需要将ctx传入即可。
 
-## 二、Context基础用法
+## 二、context基础用法
 
-接下来介绍Context的基础用法，最为重要的就是3个基础能力，**取消、超时、附加值**。
+接下来介绍context的基础用法，最为重要的就是3个基础能力，**取消、超时、附加值**。
 
-### （1）新建一个Context
+### （1）新建一个context
 
 ```go
 ctx := context.TODO()
@@ -163,7 +172,7 @@ ctx := context.Background()
 
 ```go
 // 函数声明
-func WithCancel(parent Context) (ctx Context, cancel CancelFunc)
+func WithCancel(parent context) (ctx context, cancel CancelFunc)
 // 用法:返回一个子Context和主动取消函数
 ctx, cancel := context.WithCancel(parentCtx)
 ```
@@ -195,7 +204,7 @@ func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)
 ctx := context.WithTimeout(parentCtx, 5*time.Second)
 ```
 
-这个函数在日常工作中使用得非常多，简单来说就是给Context附加一个超时控制，当超时ctx.Done()返回的channel就能读取到值，协程可以通过这个方式来判断执行时间是否满足要求。
+这个函数在日常工作中使用得非常多，简单来说就是给context附加一个超时控制，当超时ctx.Done()返回的channel就能读取到值，协程可以通过这个方式来判断执行时间是否满足要求。
 
 举个日常业务中常用的例子：
 
@@ -255,9 +264,9 @@ func NewOutgoingContext(ctx context.Context, md MD) context.Context {
 }
 ```
 
-## 三、Context源码实现
+## 三、context源码实现
 
-### （1）理解Context
+### （1）理解context
 
 - Context是一个接口
 
@@ -276,11 +285,11 @@ func NewOutgoingContext(ctx context.Context, md MD) context.Context {
     }
     ```
 
-- Context们是一棵树
+- context们是一棵树
 
     context整体是一个树形结构，不同的ctx间可能是兄弟节点或者是父子节点的关系。
 
-    同时由于Context接口有多种不同的实现，所以树的节点可能也是多种不同的ctx实现。总的来说我觉得Context的特点是：	
+    同时由于Context接口有多种不同的实现，所以树的节点可能也是多种不同的ctx实现。总的来说我觉得context的特点是：	
 
     - 树形结构，每次调用WithCancel, WithValue, WithTimeout, WithDeadline实际是为当前节点在追加子节点。
     - 继承性，某个节点被取消，其对应的子树也会全部被取消。
@@ -288,7 +297,7 @@ func NewOutgoingContext(ctx context.Context, md MD) context.Context {
 
 ​		![图片](640-20221028101600303.png)
 
-- Context的果子们
+- context的果子们
 
     在源码里实际只有4种实现，要弄懂context的源码其实把这4种对应的实现学习一下就行，他们分别是：
 
@@ -302,7 +311,7 @@ func NewOutgoingContext(ctx context.Context, md MD) context.Context {
 
     现在先简单对这几个实现有个概念，后面会对其中核心关键的部分讲解下。
 
-    ### （2）Context类图
+    ### （2）context类图
 
     ![图片](640-20221028102911176.png)
 
@@ -310,9 +319,9 @@ func NewOutgoingContext(ctx context.Context, md MD) context.Context {
 
 核心的接口是Context，里面包含了最常用的判断是否处理完成的Done()方法 。其他所有结构都通过①实现方法或②组合的方式来实现该接口。
 
-核心的结构是cancelCtx，被timerCtx包含。cancelCtx和timerCtx可以说代表了Context库最核心的取消和超时相关的实现，也最为复杂些。
+核心的结构是cancelCtx，被timerCtx包含。cancelCtx和timerCtx可以说代表了context库最核心的取消和超时相关的实现，也最为复杂些。
 
-### （3）Context源码
+### （3）context源码
 
 因为篇幅关系，不会把每一行源码都拎出来，会挑比较重点的方法讲下。由于平时我们使用都是通过几个固定的方法入口，所以会围绕这几个方法讲下
 
@@ -667,4 +676,4 @@ func WithDeadline(parent Context, d time.Time) (Context, CancelFunc) {
 
 ## 四、总结
 
-综上所述，Context的主要功能就是用于控制协程退出和附加链路信息。核心实现的结构体有4个，最复杂的是cancelCtx，最常用的是cancelCtx和valueCtx。整体呈树状结构，父子节点间同步取消信号。
+综上所述，context的主要功能就是用于控制协程退出和附加链路信息。核心实现的结构体有4个，最复杂的是cancelCtx，最常用的是cancelCtx和valueCtx。整体呈树状结构，父子节点间同步取消信号。
