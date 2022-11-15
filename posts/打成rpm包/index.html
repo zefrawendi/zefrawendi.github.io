@@ -1,0 +1,131 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>go程序打成rpm包 - 虚无空间</title><meta name=Description content="Zefrawendi's Space"><meta property="og:title" content="go程序打成rpm包"><meta property="og:description" content="# 1. 环境准备 首先是 rpmbuild 的相关依赖，无论是什么语言写的程序，只要是打包成 rpm 包，就都需要这些 1 yum install -y gcc make rpm-build redhat-rpm-config rpmbuild 的使用，需要你写不少的配置，非常繁琐"><meta property="og:type" content="article"><meta property="og:url" content="https://zefrawendi.github.io/posts/%E6%89%93%E6%88%90rpm%E5%8C%85/"><meta property="og:image" content="https://zefrawendi.github.io/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-11-11T11:23:50+08:00"><meta property="article:modified_time" content="2022-11-11T11:23:50+08:00"><meta property="og:site_name" content="虚无空间"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://zefrawendi.github.io/logo.png"><meta name=twitter:title content="go程序打成rpm包"><meta name=twitter:description content="# 1. 环境准备 首先是 rpmbuild 的相关依赖，无论是什么语言写的程序，只要是打包成 rpm 包，就都需要这些 1 yum install -y gcc make rpm-build redhat-rpm-config rpmbuild 的使用，需要你写不少的配置，非常繁琐"><meta name=application-name content="Zefrawendi's Space"><meta name=apple-mobile-web-app-title content="Zefrawendi's Space"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://zefrawendi.github.io/posts/%E6%89%93%E6%88%90rpm%E5%8C%85/><link rel=prev href=https://zefrawendi.github.io/posts/go%E6%89%A7%E8%A1%8Cshell%E5%91%BD%E4%BB%A4/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"go程序打成rpm包","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/zefrawendi.github.io\/posts\/%E6%89%93%E6%88%90rpm%E5%8C%85\/"},"image":["https:\/\/zefrawendi.github.io\/images\/Apple-Devices-Preview.png"],"genre":"posts","keywords":"rpm, build","wordcount":700,"url":"https:\/\/zefrawendi.github.io\/posts\/%E6%89%93%E6%88%90rpm%E5%8C%85\/","datePublished":"2022-11-11T11:23:50+08:00","dateModified":"2022-11-11T11:23:50+08:00","publisher":{"@type":"Organization","name":"xxxx","logo":"https:\/\/zefrawendi.github.io\/images\/avatar.png"},"author":{"@type":"Person","name":"Zefrawendi"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=虚无空间><span class=header-title-pre><i class='far fa-kiss-wink-heart fa-fw' aria-hidden=true></i></span><span id=id-1 class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>归档 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=虚无空间><span class=header-title-pre><i class='far fa-kiss-wink-heart fa-fw' aria-hidden=true></i></span><span id=id-2 class=typeit></span></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/ title>归档</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">go程序打成rpm包</h1><h2 class=single-subtitle>go程序打成rpm包</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>Zefrawendi</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E5%BC%80%E5%8F%91/><i class="far fa-folder fa-fw" aria-hidden=true></i>开发</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2022-11-11>2022-11-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;约 700 字&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;预计阅读 2 分钟&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#-1-环境准备># 1. 环境准备</a></li><li><a href=#-2-配置文件># 2. 配置文件</a></li><li><a href=#-3-使用-makefile># 3. 使用 Makefile</a></li></ul></nav></div></div><div class=content id=content><h2 id=-1-环境准备># 1. 环境准备</h2><p>首先是 rpmbuild 的相关依赖，无论是什么语言写的程序，只要是打包成 rpm 包，就都需要这些</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>yum install -y gcc make rpm-build redhat-rpm-config
+</span></span></code></pre></td></tr></table></div></div><p>rpmbuild 的使用，需要你写不少的配置，非常繁琐，有研究过的人自然知道其中的泪。</p><p>但大多数情况下，一个简单的 rpm 包可能就只是执行一个二进制文件而已，完全没有去花费大量的时间去系统学习它们。</p><p>于是乎，有人就编写了一个开源工具 <code>go-bin-rpm</code>，用它可以很方便的将二进制文件打包成 rpm 包。</p><p><code>go-bin-rpm</code> 的作者提供了多种安装方式</p><p>个人认为比较方便的是下面这条命令</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>wget -O - https://raw.githubusercontent.com/mh-cbon/latest/master/bintray.sh \
+</span></span><span class=line><span class=cl>| GH=mh-cbon/go-bin-rpm sh -xe
+</span></span></code></pre></td></tr></table></div></div><p>执行完成后，可以使用 <code>--version</code> 命令查看是否安装成功</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ go-bin-rpm --version
+</span></span><span class=line><span class=cl>go-bin-rpm version 1.0.0
+</span></span></code></pre></td></tr></table></div></div><h2 id=-2-配置文件># 2. 配置文件</h2><p><code>go-bin-rpm</code> 的配置文件是 <code>rpm.json</code> ，当然你也可以用其他文件名，我这里直接使用默认的，这样后面打包时就不用指定配置文件的名字。</p><p><code>rpm.json</code> 的内容相当精简，且直观易懂，模板如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>{
+</span></span><span class=line><span class=cl>  &#34;name&#34;: &#34;you-service-name&#34;,  # rpm 包名称
+</span></span><span class=line><span class=cl>  &#34;version&#34;: &#34;0.0.1&#34;,
+</span></span><span class=line><span class=cl>  &#34;release&#34;: &#34;20221110&#34;,
+</span></span><span class=line><span class=cl>  &#34;arch&#34;: &#34;x86_64&#34;,
+</span></span><span class=line><span class=cl>  &#34;summary&#34;: &#34;&#34;,
+</span></span><span class=line><span class=cl>  &#34;description&#34;: &#34;&#34;,
+</span></span><span class=line><span class=cl>  &#34;license&#34;: &#34;iswbm.com&#34;,
+</span></span><span class=line><span class=cl>  &#34;url&#34;: &#34;https://gtihub.com/iswbm/!name!&#34;, # !name! 相当于变量，会取前面 rpm 包名称
+</span></span><span class=line><span class=cl>  &#34;files&#34;: [
+</span></span><span class=line><span class=cl>    {
+</span></span><span class=line><span class=cl>      &#34;from&#34;: &#34;./bin/!name!&#34;,
+</span></span><span class=line><span class=cl>      &#34;to&#34;: &#34;/usr/local/!name!/&#34;,
+</span></span><span class=line><span class=cl>      &#34;base&#34;: &#34;&#34;,
+</span></span><span class=line><span class=cl>      &#34;type&#34;: &#34;&#34;
+</span></span><span class=line><span class=cl>    },
+</span></span><span class=line><span class=cl>    {
+</span></span><span class=line><span class=cl>      &#34;from&#34;: &#34;./!name!.service&#34;,
+</span></span><span class=line><span class=cl>      &#34;to&#34;: &#34;/usr/lib/systemd/system/&#34;,
+</span></span><span class=line><span class=cl>      &#34;base&#34;: &#34;&#34;,
+</span></span><span class=line><span class=cl>      &#34;type&#34;: &#34;&#34;
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>  ]
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></td></tr></table></div></div><p>如果你的 rpm 安装后是以 service 运行的，那 <code>files</code> 要包含如下几项内容：</p><ol><li>二进制文件</li><li>service 文件</li><li>配置文件（如果需要的话）</li></ol><p>其中 service 文件的模板，这边也给出来</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>[Unit]
+</span></span><span class=line><span class=cl>Description=
+</span></span><span class=line><span class=cl>After=syslog.target network.target
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>[Service]
+</span></span><span class=line><span class=cl>Environment=key=value
+</span></span><span class=line><span class=cl>Type=simple
+</span></span><span class=line><span class=cl>NotifyAccess=all
+</span></span><span class=line><span class=cl>TimeoutStartSec=0
+</span></span><span class=line><span class=cl>Restart=always
+</span></span><span class=line><span class=cl>User=root
+</span></span><span class=line><span class=cl>ExecStart=/usr/local/xxxx/bin/xxxx
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>[Install]
+</span></span><span class=line><span class=cl>WantedBy=multi-user.target
+</span></span></code></pre></td></tr></table></div></div><p>一切准备好了，就可以使用如下命令</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># VERSION 和 RELEASE 请对应替换
+</span></span><span class=line><span class=cl>go-bin-rpm generate -o rpms/xxxx-$(VERSION)-$(RELEASE).rpm
+</span></span></code></pre></td></tr></table></div></div><p>如果在不同的平台或系统有不同的二进制，则可以准备多个 <code>rpm.json</code>，然后在打包时，使用 <code>-f rpm.json</code> 来指定配置文件。</p><h2 id=-3-使用-makefile># 3. 使用 Makefile</h2><p>go-bin-rpm 的命令还是比较长，我习惯写一个 Makefile 来方便编译</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>VERSION = 1.0.0
+</span></span><span class=line><span class=cl>RELEASE = $(shell date +&#34;%Y%m%d&#34;)
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>.PHONY: build-go
+</span></span><span class=line><span class=cl>build-go:
+</span></span><span class=line><span class=cl>    go build -o ./bin/hello .
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>.PHONY: build
+</span></span><span class=line><span class=cl>build: build-go
+</span></span><span class=line><span class=cl>    sed -i &#34;s/VERSION/$(VERSION)/g&#34; rpm.json
+</span></span><span class=line><span class=cl>    sed -i &#34;s/RELEASE/$(RELEASE)/g&#34; rpm.json
+</span></span><span class=line><span class=cl>    mkdir -p rpms
+</span></span><span class=line><span class=cl>    go-bin-rpm generate -o rpms/hellp-$(VERSION)-$(RELEASE).rpm
+</span></span></code></pre></td></tr></table></div></div><p>后面只要使用 <code>make build</code> 就可以直接一步实现 <code>编译</code> + <code>打包</code> ，使用上更加顺手。</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2022-11-11</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/rpm/>rpm</a>,&nbsp;<a href=/tags/build/>build</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/go%E6%89%A7%E8%A1%8Cshell%E5%91%BD%E4%BB%A4/ class=prev rel=prev title=go执行shell命令><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>go执行shell命令</a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Zefrawendi</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.13.1/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/typeit@8.6.0/dist/index.umd.js></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:50},comment:{},data:{"id-1":"虚无空间","id-2":"虚无空间"},search:{algoliaAppID:"UUU68T8E14",algoliaIndex:"hugo",algoliaSearchKey:"61f9c4a232b684d32d4de9bff58d4997",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:30,type:"algolia"},typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"id-1":["id-1"],"id-2":["id-2"]},duration:-1,speed:100}}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

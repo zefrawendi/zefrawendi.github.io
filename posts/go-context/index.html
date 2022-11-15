@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>context - 虚无空间</title><meta name=Description content="Zefrawendi's Space"><meta property="og:title" content="context"><meta property="og:description" content="一、为什么使用Context （1）go的扛把子 要论go最津津乐道的功能莫过于go强大而简洁的并发能力。 1 2 3 4 5 func main() { go func() { fmt.Println(&#34;Hello World&#34;) }() } 通过简单"><meta property="og:type" content="article"><meta property="og:url" content="https://zefrawendi.github.io/posts/context/"><meta property="og:image" content="https://zefrawendi.github.io/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-10-28T09:47:50+08:00"><meta property="article:modified_time" content="2022-10-28T09:47:50+08:00"><meta property="og:site_name" content="虚无空间"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://zefrawendi.github.io/logo.png"><meta name=twitter:title content="context"><meta name=twitter:description content="一、为什么使用Context （1）go的扛把子 要论go最津津乐道的功能莫过于go强大而简洁的并发能力。 1 2 3 4 5 func main() { go func() { fmt.Println(&#34;Hello World&#34;) }() } 通过简单"><meta name=application-name content="Zefrawendi's Space"><meta name=apple-mobile-web-app-title content="Zefrawendi's Space"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://zefrawendi.github.io/posts/context/><link rel=prev href=https://zefrawendi.github.io/posts/grpc/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"context","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/zefrawendi.github.io\/posts\/context\/"},"image":["https:\/\/zefrawendi.github.io\/images\/Apple-Devices-Preview.png"],"genre":"posts","keywords":"context","wordcount":5737,"url":"https:\/\/zefrawendi.github.io\/posts\/context\/","datePublished":"2022-10-28T09:47:50+08:00","dateModified":"2022-10-28T09:47:50+08:00","publisher":{"@type":"Organization","name":"xxxx","logo":"https:\/\/zefrawendi.github.io\/images\/avatar.png"},"author":{"@type":"Person","name":"Zefrawendi"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=虚无空间><span class=header-title-pre><i class='far fa-kiss-wink-heart fa-fw' aria-hidden=true></i></span><span id=id-1 class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>归档 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>go context - 虚无空间</title><meta name=Description content="Zefrawendi's Space"><meta property="og:title" content="go context"><meta property="og:description" content="一、为什么使用context （1）go的扛把子 要论go最津津乐道的功能莫过于go强大而简洁的并发能力。 1 2 3 4 5 func main() { go func() { fmt.Println(&#34;Hello World&#34;) }() } 通过简单"><meta property="og:type" content="article"><meta property="og:url" content="https://zefrawendi.github.io/posts/go-context/"><meta property="og:image" content="https://zefrawendi.github.io/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-10-28T09:47:50+08:00"><meta property="article:modified_time" content="2022-10-28T09:47:50+08:00"><meta property="og:site_name" content="虚无空间"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://zefrawendi.github.io/logo.png"><meta name=twitter:title content="go context"><meta name=twitter:description content="一、为什么使用context （1）go的扛把子 要论go最津津乐道的功能莫过于go强大而简洁的并发能力。 1 2 3 4 5 func main() { go func() { fmt.Println(&#34;Hello World&#34;) }() } 通过简单"><meta name=application-name content="Zefrawendi's Space"><meta name=apple-mobile-web-app-title content="Zefrawendi's Space"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://zefrawendi.github.io/posts/go-context/><link rel=prev href=https://zefrawendi.github.io/posts/grpc/><link rel=next href=https://zefrawendi.github.io/posts/go%E6%89%A7%E8%A1%8Cshell%E5%91%BD%E4%BB%A4/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"go context","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/zefrawendi.github.io\/posts\/go-context\/"},"image":["https:\/\/zefrawendi.github.io\/images\/Apple-Devices-Preview.png"],"genre":"posts","keywords":"context","wordcount":5812,"url":"https:\/\/zefrawendi.github.io\/posts\/go-context\/","datePublished":"2022-10-28T09:47:50+08:00","dateModified":"2022-10-28T09:47:50+08:00","publisher":{"@type":"Organization","name":"xxxx","logo":"https:\/\/zefrawendi.github.io\/images\/avatar.png"},"author":{"@type":"Person","name":"Zefrawendi"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=虚无空间><span class=header-title-pre><i class='far fa-kiss-wink-heart fa-fw' aria-hidden=true></i></span><span id=id-1 class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>归档 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
 <input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
 <a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
@@ -7,9 +7,9 @@
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
 <a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
 <span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/ title>归档</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">context</h1><h2 class=single-subtitle>Go标准库：context</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>Zefrawendi</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E5%BC%80%E5%8F%91/><i class="far fa-folder fa-fw" aria-hidden=true></i>开发</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2022-10-28>2022-10-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;约 5737 字&nbsp;
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">go context</h1><h2 class=single-subtitle>Go标准库：context</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>Zefrawendi</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E5%BC%80%E5%8F%91/><i class="far fa-folder fa-fw" aria-hidden=true></i>开发</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2022-10-28>2022-10-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;约 5812 字&nbsp;
 <i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;预计阅读 12 分钟&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#一为什么使用context>一、为什么使用Context</a><ul><li><a href=#1go的扛把子>（1）go的扛把子</a></li><li><a href=#2想象一个没有context的世界>（2）想象一个没有Context的世界</a></li><li><a href=#3用context精简代码>（3）用Context精简代码</a></li></ul></li><li><a href=#二context基础用法>二、Context基础用法</a><ul><li><a href=#1新建一个context>（1）新建一个Context</a></li><li><a href=#2withcancel>（2）WithCancel</a></li><li><a href=#3withtimeout>（3）WithTimeout</a></li><li><a href=#4withdeadline>（4）WithDeadline</a></li><li><a href=#5withvalue>（5）WithValue</a></li></ul></li><li><a href=#三context源码实现>三、Context源码实现</a><ul><li><a href=#1理解context>（1）理解Context</a></li><li><a href=#2context类图>（2）Context类图</a></li><li><a href=#3context源码>（3）Context源码</a><ul><li><a href=#emptyctx>emptyCtx</a></li><li><a href=#valuectx>valueCtx</a></li><li><a href=#cancelctx>cancelCtx</a></li><li><a href=#timerctx>timerCtx</a></li></ul></li></ul></li><li><a href=#四总结>四、总结</a></li></ul></nav></div></div><div class=content id=content><h2 id=一为什么使用context>一、为什么使用Context</h2><h3 id=1go的扛把子>（1）go的扛把子</h3><p>要论go最津津乐道的功能莫过于go强大而简洁的并发能力。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#一为什么使用context>一、为什么使用context</a><ul><li><a href=#1go的扛把子>（1）go的扛把子</a></li><li><a href=#2想象一个没有context的世界>（2）想象一个没有context的世界</a></li><li><a href=#3用context精简代码>（3）用context精简代码</a></li></ul></li><li><a href=#二context基础用法>二、context基础用法</a><ul><li><a href=#1新建一个context>（1）新建一个context</a></li><li><a href=#2withcancel>（2）WithCancel</a></li><li><a href=#3withtimeout>（3）WithTimeout</a></li><li><a href=#4withdeadline>（4）WithDeadline</a></li><li><a href=#5withvalue>（5）WithValue</a></li></ul></li><li><a href=#三context源码实现>三、context源码实现</a><ul><li><a href=#1理解context>（1）理解context</a></li><li><a href=#2context类图>（2）context类图</a></li><li><a href=#3context源码>（3）context源码</a><ul><li><a href=#emptyctx>emptyCtx</a></li><li><a href=#valuectx>valueCtx</a></li><li><a href=#cancelctx>cancelCtx</a></li><li><a href=#timerctx>timerCtx</a></li></ul></li></ul></li><li><a href=#四总结>四、总结</a></li></ul></nav></div></div><div class=content id=content><h2 id=一为什么使用context>一、为什么使用context</h2><h3 id=1go的扛把子>（1）go的扛把子</h3><p>要论go最津津乐道的功能莫过于go强大而简洁的并发能力。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -19,57 +19,7 @@
 </span></span><span class=line><span class=cl>		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Hello World&#34;</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>	<span class=p>}()</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><p>通过简单的go func(){}，go可以快速生成新的协程并运行。</p><h3 id=2想象一个没有context的世界>（2）想象一个没有Context的世界</h3><p>go里面常用于协程间通信和管理的有channel和sync包。比如channel可以通知协程做特定操作（退出，阻塞等），sync可以加锁和同步。</p><p>假如我要实现一个可以同时关闭所有协程的程序，可以这样实现。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
-</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
-</span></span><span class=line><span class=cl>	<span class=s>&#34;time&#34;</span>
-</span></span><span class=line><span class=cl><span class=p>)</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>	<span class=nx>closed</span> <span class=o>:=</span> <span class=nb>make</span><span class=p>(</span><span class=kd>chan</span> <span class=kd>struct</span><span class=p>{})</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>	<span class=k>for</span> <span class=nx>i</span> <span class=o>:=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=p>&lt;</span> <span class=mi>2</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>		<span class=c1>// do something
-</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=k>go</span> <span class=kd>func</span><span class=p>(</span><span class=nx>i</span> <span class=kt>int</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>			<span class=k>select</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>			<span class=k>case</span> <span class=o>&lt;-</span><span class=nx>closed</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>				<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;%d Closed\n&#34;</span><span class=p>,</span> <span class=nx>i</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>			<span class=p>}</span>
-</span></span><span class=line><span class=cl>		<span class=p>}(</span><span class=nx>i</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>	<span class=p>}</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>	<span class=c1>// 发送指令关闭所有协程
-</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nb>close</span><span class=p>(</span><span class=nx>closed</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>	<span class=nx>time</span><span class=p>.</span><span class=nf>Sleep</span><span class=p>(</span><span class=mi>1</span> <span class=o>*</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span>
-</span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><p>因为go的协程不支持直接从外部退出，不像C++和Java有个线程ID可以操作。所以只能通过协程自己退出的方式。一般来说通过channel来控制是最方便的。</p><p>如果我想加点功能，比如到时间后退出，只要给channel增加关闭条件即可。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><p>通过简单的go func(){}，go可以快速生成新的协程并运行。</p><h3 id=2想象一个没有context的世界>（2）想象一个没有context的世界</h3><p>go里面常用于协程间通信和管理的有channel和sync包。比如channel可以通知协程做特定操作（退出，阻塞等），sync可以加锁和同步。</p><p>假如我要实现一个可以同时关闭所有协程的程序，可以这样实现。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -96,40 +46,34 @@
 </span><span class=lnt>25
 </span><span class=lnt>26
 </span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
 </span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
-</span></span><span class=line><span class=cl>	<span class=s>&#34;time&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;sync&#34;</span>
 </span></span><span class=line><span class=cl><span class=p>)</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>	<span class=nx>closed</span> <span class=o>:=</span> <span class=nb>make</span><span class=p>(</span><span class=kd>chan</span> <span class=kd>struct</span><span class=p>{})</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>	<span class=k>for</span> <span class=nx>i</span> <span class=o>:=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=p>&lt;</span> <span class=mi>2</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>		<span class=k>go</span> <span class=kd>func</span><span class=p>(</span><span class=nx>i</span> <span class=kt>int</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>			<span class=c1>// do something
-</span></span></span><span class=line><span class=cl><span class=c1></span>			<span class=k>select</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 通过一个chan来控制goroutine的执行
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>closed</span> <span class=o>:=</span> <span class=nb>make</span><span class=p>(</span><span class=kd>chan</span> <span class=kd>struct</span><span class=p>{})</span>
+</span></span><span class=line><span class=cl>	<span class=nx>wg</span> <span class=o>:=</span> <span class=nx>sync</span><span class=p>.</span><span class=nx>WaitGroup</span><span class=p>{}</span>
+</span></span><span class=line><span class=cl>	<span class=k>for</span> <span class=nx>i</span> <span class=o>:=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=p>&lt;</span> <span class=mi>200</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>wg</span><span class=p>.</span><span class=nf>Add</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=c1>// do something
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=k>go</span> <span class=kd>func</span><span class=p>(</span><span class=nx>i</span> <span class=kt>int</span><span class=p>,</span> <span class=nx>wg</span> <span class=o>*</span><span class=nx>sync</span><span class=p>.</span><span class=nx>WaitGroup</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>select</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>			<span class=k>case</span> <span class=o>&lt;-</span><span class=nx>closed</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>				<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;%d Timeout\n&#34;</span><span class=p>,</span> <span class=nx>i</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>				<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;%d Closed\n&#34;</span><span class=p>,</span> <span class=nx>i</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>				<span class=nx>wg</span><span class=p>.</span><span class=nf>Done</span><span class=p>()</span>
 </span></span><span class=line><span class=cl>			<span class=p>}</span>
-</span></span><span class=line><span class=cl>		<span class=p>}(</span><span class=nx>i</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=p>}(</span><span class=nx>i</span><span class=p>,</span> <span class=o>&amp;</span><span class=nx>wg</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>	<span class=p>}</span>
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>	<span class=c1>// 加个时间条件
-</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>ta</span> <span class=o>:=</span> <span class=nx>time</span><span class=p>.</span><span class=nf>After</span><span class=p>(</span><span class=mi>5</span> <span class=o>*</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>	<span class=k>select</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>	<span class=k>case</span> <span class=o>&lt;-</span><span class=nx>ta</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>		<span class=nb>close</span><span class=p>(</span><span class=nx>closed</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>	<span class=p>}</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>	<span class=nx>time</span><span class=p>.</span><span class=nf>Sleep</span><span class=p>(</span><span class=mi>1</span> <span class=o>*</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 发送指令关闭所有协程
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nb>close</span><span class=p>(</span><span class=nx>closed</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>wg</span><span class=p>.</span><span class=nf>Wait</span><span class=p>()</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=3用context精简代码>（3）用Context精简代码</h3><p>上面的代码已经够简单了，但是还是显得有些复杂。比如每次都要在协程内部增加对channel的判断，也要在外部设置关闭条件。试想一下，如果程序要限制的是总时长，而不是单个操作的时长，这样每个操作要限制多少时间也是个难题。</p><p><img class=lazyload src=/svg/loading.min.svg data-src=/posts/context/640.png data-srcset="/posts/context/640.png, /posts/context/640.png 1.5x, /posts/context/640.png 2x" data-sizes=auto alt=/posts/context/640.png title=图片 width=1056 height=650></p><p>这个时候就轮到Context登场了。Context顾名思义是协程的上下文，主要用于跟踪协程的状态，可以做一些简单的协程控制，也能记录一些协程信息。</p><p>下面试着用Context改造下前面的例子：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><p>因为go的协程不支持直接从外部退出，不像C++和Java有个线程ID可以操作。所以只能通过协程自己退出的方式。一般来说通过channel来控制是最方便的。</p><p>如果我想加点功能，比如到时间后退出，只要给channel增加关闭条件即可。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -165,21 +109,95 @@
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;sync&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;time&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 通过一个chan来控制goroutine的执行
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>closed</span> <span class=o>:=</span> <span class=nb>make</span><span class=p>(</span><span class=kd>chan</span> <span class=kd>struct</span><span class=p>{})</span>
+</span></span><span class=line><span class=cl>	<span class=nx>wg</span> <span class=o>:=</span> <span class=nx>sync</span><span class=p>.</span><span class=nx>WaitGroup</span><span class=p>{}</span>
+</span></span><span class=line><span class=cl>	<span class=k>for</span> <span class=nx>i</span> <span class=o>:=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=p>&lt;</span> <span class=mi>200</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>wg</span><span class=p>.</span><span class=nf>Add</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=c1>// do something
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=k>go</span> <span class=kd>func</span><span class=p>(</span><span class=nx>i</span> <span class=kt>int</span><span class=p>,</span> <span class=nx>wg</span> <span class=o>*</span><span class=nx>sync</span><span class=p>.</span><span class=nx>WaitGroup</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>select</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>case</span> <span class=o>&lt;-</span><span class=nx>closed</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>				<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;%d Closed\n&#34;</span><span class=p>,</span> <span class=nx>i</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>				<span class=nx>wg</span><span class=p>.</span><span class=nf>Done</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span>
+</span></span><span class=line><span class=cl>		<span class=p>}(</span><span class=nx>i</span><span class=p>,</span> <span class=o>&amp;</span><span class=nx>wg</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 加个时间条件
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>ta</span> <span class=o>:=</span> <span class=nx>time</span><span class=p>.</span><span class=nf>After</span><span class=p>(</span><span class=mi>5</span> <span class=o>*</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>select</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=k>case</span> <span class=o>&lt;-</span><span class=nx>ta</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>		<span class=nb>close</span><span class=p>(</span><span class=nx>closed</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>wg</span><span class=p>.</span><span class=nf>Wait</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=3用context精简代码>（3）用context精简代码</h3><p>上面的代码已经够简单了，但是还是显得有些复杂。比如每次都要在协程内部增加对channel的判断，也要在外部设置关闭条件。试想一下，如果程序要限制的是总时长，而不是单个操作的时长，这样每个操作要限制多少时间也是个难题。</p><p><img class=lazyload src=/svg/loading.min.svg data-src=/posts/go-context/640.png data-srcset="/posts/go-context/640.png, /posts/go-context/640.png 1.5x, /posts/go-context/640.png 2x" data-sizes=auto alt=/posts/go-context/640.png title=图片 width=1056 height=650></p><p>这个时候就轮到context登场了。context顾名思义是协程的上下文，主要用于跟踪协程的状态，可以做一些简单的协程控制，也能记录一些协程信息。</p><p>下面试着用context改造下前面的例子：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
 </span></span><span class=line><span class=cl>	<span class=s>&#34;context&#34;</span>
 </span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;sync&#34;</span>
 </span></span><span class=line><span class=cl>	<span class=s>&#34;time&#34;</span>
 </span></span><span class=line><span class=cl><span class=p>)</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>	<span class=c1>// 空的父context
-</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>pctx</span> <span class=o>:=</span> <span class=nx>context</span><span class=p>.</span><span class=nf>TODO</span><span class=p>()</span>
-</span></span><span class=line><span class=cl>
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>parentCtx</span> <span class=o>:=</span> <span class=nx>context</span><span class=p>.</span><span class=nf>Background</span><span class=p>()</span>
 </span></span><span class=line><span class=cl>	<span class=c1>// 子context（携带有超时信息），cancel函数（可以主动触发取消）
-</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>//ctx, cancel := context.WithTimeout(pctx, 5*time.Second)
-</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>ctx</span><span class=p>,</span> <span class=nx>_</span> <span class=o>:=</span> <span class=nx>context</span><span class=p>.</span><span class=nf>WithTimeout</span><span class=p>(</span><span class=nx>pctx</span><span class=p>,</span> <span class=mi>5</span><span class=o>*</span><span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>//ctx, cancel := context.WithTimeout(parentCtx, 5*time.Second)
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>ctx</span><span class=p>,</span> <span class=nx>_</span> <span class=o>:=</span> <span class=nx>context</span><span class=p>.</span><span class=nf>WithTimeout</span><span class=p>(</span><span class=nx>parentCtx</span><span class=p>,</span> <span class=mi>5</span><span class=o>*</span><span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>wg</span> <span class=o>:=</span> <span class=nx>sync</span><span class=p>.</span><span class=nx>WaitGroup</span><span class=p>{}</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>	<span class=k>for</span> <span class=nx>i</span> <span class=o>:=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=p>&lt;</span> <span class=mi>2</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>wg</span><span class=p>.</span><span class=nf>Add</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>		<span class=k>go</span> <span class=kd>func</span><span class=p>(</span><span class=nx>i</span> <span class=kt>int</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>defer</span> <span class=nx>wg</span><span class=p>.</span><span class=nf>Done</span><span class=p>()</span>
 </span></span><span class=line><span class=cl>			<span class=c1>// do something
 </span></span></span><span class=line><span class=cl><span class=c1></span>
 </span></span><span class=line><span class=cl>			<span class=c1>// 大部分工具库内置了对ctx的判断，下面的部分几乎可以省略
@@ -193,9 +211,9 @@
 </span></span><span class=line><span class=cl>	<span class=c1>// 调用cancel会直接关闭ctx.Done()返回的管道，不用等到超时
 </span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>//cancel()
 </span></span></span><span class=line><span class=cl><span class=c1></span>
-</span></span><span class=line><span class=cl>	<span class=nx>time</span><span class=p>.</span><span class=nf>Sleep</span><span class=p>(</span><span class=mi>6</span> <span class=o>*</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>wg</span><span class=p>.</span><span class=nf>Wait</span><span class=p>()</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><p>通过Context可以进一步简化控制代码，且更为友好的是，大多数go库，如http、各种db driver、grpc等都内置了对ctx.Done()的判断，我们只需要将ctx传入即可。</p><h2 id=二context基础用法>二、Context基础用法</h2><p>接下来介绍Context的基础用法，最为重要的就是3个基础能力，<strong>取消、超时、附加值</strong>。</p><h3 id=1新建一个context>（1）新建一个Context</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><p>通过context可以进一步简化控制代码，且更为友好的是，大多数go库，如http、各种db driver、grpc等都内置了对ctx.Done()的判断，我们只需要将ctx传入即可。</p><h2 id=二context基础用法>二、context基础用法</h2><p>接下来介绍context的基础用法，最为重要的就是3个基础能力，<strong>取消、超时、附加值</strong>。</p><h3 id=1新建一个context>（1）新建一个context</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=nx>ctx</span> <span class=o>:=</span> <span class=nx>context</span><span class=p>.</span><span class=nf>TODO</span><span class=p>()</span>
 </span></span><span class=line><span class=cl><span class=nx>ctx</span> <span class=o>:=</span> <span class=nx>context</span><span class=p>.</span><span class=nf>Background</span><span class=p>()</span>
@@ -204,7 +222,7 @@
 </span><span class=lnt>3
 </span><span class=lnt>4
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=c1>// 函数声明
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=nf>WithCancel</span><span class=p>(</span><span class=nx>parent</span> <span class=nx>Context</span><span class=p>)</span> <span class=p>(</span><span class=nx>ctx</span> <span class=nx>Context</span><span class=p>,</span> <span class=nx>cancel</span> <span class=nx>CancelFunc</span><span class=p>)</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=nf>WithCancel</span><span class=p>(</span><span class=nx>parent</span> <span class=nx>context</span><span class=p>)</span> <span class=p>(</span><span class=nx>ctx</span> <span class=nx>context</span><span class=p>,</span> <span class=nx>cancel</span> <span class=nx>CancelFunc</span><span class=p>)</span>
 </span></span><span class=line><span class=cl><span class=c1>// 用法:返回一个子Context和主动取消函数
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>cancel</span> <span class=o>:=</span> <span class=nx>context</span><span class=p>.</span><span class=nf>WithCancel</span><span class=p>(</span><span class=nx>parentCtx</span><span class=p>)</span>
 </span></span></code></pre></td></tr></table></div></div><p>这个函数相当重要，会根据传入的context生成一个子context和一个取消函数。当父context有相关取消操作，或者直接调用cancel函数的话，子context就会被取消。</p><p>举个日常业务中常用的例子：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
@@ -237,7 +255,7 @@
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=nf>WithTimeout</span><span class=p>(</span><span class=nx>parent</span> <span class=nx>Context</span><span class=p>,</span> <span class=nx>timeout</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Duration</span><span class=p>)</span> <span class=p>(</span><span class=nx>Context</span><span class=p>,</span> <span class=nx>CancelFunc</span><span class=p>)</span>
 </span></span><span class=line><span class=cl><span class=c1>// 用法：返回一个子Context（会在一段时间后自动取消），主动取消函数
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>ctx</span> <span class=o>:=</span> <span class=nx>context</span><span class=p>.</span><span class=nf>WithTimeout</span><span class=p>(</span><span class=nx>parentCtx</span><span class=p>,</span> <span class=mi>5</span><span class=o>*</span><span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span>
-</span></span></code></pre></td></tr></table></div></div><p>这个函数在日常工作中使用得非常多，简单来说就是给Context附加一个超时控制，当超时ctx.Done()返回的channel就能读取到值，协程可以通过这个方式来判断执行时间是否满足要求。</p><p>举个日常业务中常用的例子：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><p>这个函数在日常工作中使用得非常多，简单来说就是给context附加一个超时控制，当超时ctx.Done()返回的channel就能读取到值，协程可以通过这个方式来判断执行时间是否满足要求。</p><p>举个日常业务中常用的例子：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -301,7 +319,7 @@
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kd>func</span> <span class=nf>NewOutgoingContext</span><span class=p>(</span><span class=nx>ctx</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Context</span><span class=p>,</span> <span class=nx>md</span> <span class=nx>MD</span><span class=p>)</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Context</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>context</span><span class=p>.</span><span class=nf>WithValue</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>mdOutgoingKey</span><span class=p>{},</span> <span class=nx>rawMD</span><span class=p>{</span><span class=nx>md</span><span class=p>:</span> <span class=nx>md</span><span class=p>})</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=三context源码实现>三、Context源码实现</h2><h3 id=1理解context>（1）理解Context</h3><ul><li><p>Context是一个接口</p><p>虽然我们平时写代码时直接context.Context拿来就用，但实际上context.Context是一个接口，源码里是有多种不同的实现的，借此实现不同的功能。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h2 id=三context源码实现>三、context源码实现</h2><h3 id=1理解context>（1）理解context</h3><ul><li><p>Context是一个接口</p><p>虽然我们平时写代码时直接context.Context拿来就用，但实际上context.Context是一个接口，源码里是有多种不同的实现的，借此实现不同的功能。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -321,7 +339,7 @@
 </span></span><span class=line><span class=cl>  <span class=c1>// 返回ctx绑定的key对应的value值
 </span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nf>Value</span><span class=p>(</span><span class=nx>key</span> <span class=kd>interface</span><span class=p>{})</span> <span class=kd>interface</span><span class=p>{}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div></li><li><p>Context们是一棵树</p><p>context整体是一个树形结构，不同的ctx间可能是兄弟节点或者是父子节点的关系。</p><p>同时由于Context接口有多种不同的实现，所以树的节点可能也是多种不同的ctx实现。总的来说我觉得Context的特点是：</p><ul><li>树形结构，每次调用WithCancel, WithValue, WithTimeout, WithDeadline实际是为当前节点在追加子节点。</li><li>继承性，某个节点被取消，其对应的子树也会全部被取消。</li><li>多样性，节点存在不同的实现，故每个节点会附带不同的功能。</li></ul></li></ul><p>​ <img class=lazyload src=/svg/loading.min.svg data-src=/posts/context/640-20221028101600303.png data-srcset="/posts/context/640-20221028101600303.png, /posts/context/640-20221028101600303.png 1.5x, /posts/context/640-20221028101600303.png 2x" data-sizes=auto alt=/posts/context/640-20221028101600303.png title=图片 width=1080 height=535></p><ul><li><p>Context的果子们</p><p>在源码里实际只有4种实现，要弄懂context的源码其实把这4种对应的实现学习一下就行，他们分别是：</p><ul><li><p>emptyCtx：一个空的ctx，一般用于做根节点。</p></li><li><p>cancelCtx：核心，用来处理取消相关的操作。</p></li><li><p>timerCtx：用来处理超时相关操作。</p></li><li><p>valueCtx：附加值的实现方法。</p></li></ul><p>现在先简单对这几个实现有个概念，后面会对其中核心关键的部分讲解下。</p><h3 id=2context类图>（2）Context类图</h3><p><img class=lazyload src=/svg/loading.min.svg data-src=/posts/context/640-20221028102911176.png data-srcset="/posts/context/640-20221028102911176.png, /posts/context/640-20221028102911176.png 1.5x, /posts/context/640-20221028102911176.png 2x" data-sizes=auto alt=/posts/context/640-20221028102911176.png title=图片 width=981 height=711></p></li></ul><p>从类图中可以看出，源码里有4种结构和3种接口，相对于其他go库源码来说是比较简单的。</p><p>核心的接口是Context，里面包含了最常用的判断是否处理完成的Done()方法 。其他所有结构都通过①实现方法或②组合的方式来实现该接口。</p><p>核心的结构是cancelCtx，被timerCtx包含。cancelCtx和timerCtx可以说代表了Context库最核心的取消和超时相关的实现，也最为复杂些。</p><h3 id=3context源码>（3）Context源码</h3><p>因为篇幅关系，不会把每一行源码都拎出来，会挑比较重点的方法讲下。由于平时我们使用都是通过几个固定的方法入口，所以会围绕这几个方法讲下</p><h4 id=emptyctx>emptyCtx</h4><p><strong>对外体现</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div></li><li><p>context们是一棵树</p><p>context整体是一个树形结构，不同的ctx间可能是兄弟节点或者是父子节点的关系。</p><p>同时由于Context接口有多种不同的实现，所以树的节点可能也是多种不同的ctx实现。总的来说我觉得context的特点是：</p><ul><li>树形结构，每次调用WithCancel, WithValue, WithTimeout, WithDeadline实际是为当前节点在追加子节点。</li><li>继承性，某个节点被取消，其对应的子树也会全部被取消。</li><li>多样性，节点存在不同的实现，故每个节点会附带不同的功能。</li></ul></li></ul><p>​ <img class=lazyload src=/svg/loading.min.svg data-src=/posts/go-context/640-20221028101600303.png data-srcset="/posts/go-context/640-20221028101600303.png, /posts/go-context/640-20221028101600303.png 1.5x, /posts/go-context/640-20221028101600303.png 2x" data-sizes=auto alt=/posts/go-context/640-20221028101600303.png title=图片 width=1080 height=535></p><ul><li><p>context的果子们</p><p>在源码里实际只有4种实现，要弄懂context的源码其实把这4种对应的实现学习一下就行，他们分别是：</p><ul><li><p>emptyCtx：一个空的ctx，一般用于做根节点。</p></li><li><p>cancelCtx：核心，用来处理取消相关的操作。</p></li><li><p>timerCtx：用来处理超时相关操作。</p></li><li><p>valueCtx：附加值的实现方法。</p></li></ul><p>现在先简单对这几个实现有个概念，后面会对其中核心关键的部分讲解下。</p><h3 id=2context类图>（2）context类图</h3><p><img class=lazyload src=/svg/loading.min.svg data-src=/posts/go-context/640-20221028102911176.png data-srcset="/posts/go-context/640-20221028102911176.png, /posts/go-context/640-20221028102911176.png 1.5x, /posts/go-context/640-20221028102911176.png 2x" data-sizes=auto alt=/posts/go-context/640-20221028102911176.png title=图片 width=981 height=711></p></li></ul><p>从类图中可以看出，源码里有4种结构和3种接口，相对于其他go库源码来说是比较简单的。</p><p>核心的接口是Context，里面包含了最常用的判断是否处理完成的Done()方法 。其他所有结构都通过①实现方法或②组合的方式来实现该接口。</p><p>核心的结构是cancelCtx，被timerCtx包含。cancelCtx和timerCtx可以说代表了context库最核心的取消和超时相关的实现，也最为复杂些。</p><h3 id=3context源码>（3）context源码</h3><p>因为篇幅关系，不会把每一行源码都拎出来，会挑比较重点的方法讲下。由于平时我们使用都是通过几个固定的方法入口，所以会围绕这几个方法讲下</p><h4 id=emptyctx>emptyCtx</h4><p><strong>对外体现</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -401,7 +419,7 @@
 </span></span><span class=line><span class=cl>  <span class=nx>nctx</span> <span class=o>:=</span> <span class=nx>context</span><span class=p>.</span><span class=nf>WithTimeout</span><span class=p>(</span><span class=nx>nctx</span><span class=p>,</span> <span class=mi>5</span><span class=o>*</span><span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>  <span class=o>...</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=/posts/context/640-20221028103300699.png data-srcset="/posts/context/640-20221028103300699.png, /posts/context/640-20221028103300699.png 1.5x, /posts/context/640-20221028103300699.png 2x" data-sizes=auto alt=/posts/context/640-20221028103300699.png title=图片 width=1080 height=505></p><h4 id=valuectx>valueCtx</h4><p><strong>对外体现</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=/posts/go-context/640-20221028103300699.png data-srcset="/posts/go-context/640-20221028103300699.png, /posts/go-context/640-20221028103300699.png 1.5x, /posts/go-context/640-20221028103300699.png 2x" data-sizes=auto alt=/posts/go-context/640-20221028103300699.png title=图片 width=1080 height=505></p><h4 id=valuectx>valueCtx</h4><p><strong>对外体现</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -461,7 +479,7 @@
 </span></span><span class=line><span class=cl>   <span class=p>}</span>
 </span></span><span class=line><span class=cl>   <span class=k>return</span> <span class=nx>c</span><span class=p>.</span><span class=nx>Context</span><span class=p>.</span><span class=nf>Value</span><span class=p>(</span><span class=nx>key</span><span class=p>)</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><p>从实现上可以看出，每当我们往ctx里调WithValue塞值时，都会生成一个新的子节点。调用的次数多了，生成的子树就很庞大。</p><p><img class=lazyload src=/svg/loading.min.svg data-src=/posts/context/640-20221028103425741.png data-srcset="/posts/context/640-20221028103425741.png, /posts/context/640-20221028103425741.png 1.5x, /posts/context/640-20221028103425741.png 2x" data-sizes=auto alt=/posts/context/640-20221028103425741.png title=图片 width=1080 height=654></p><p>若当前节点的key和传入的key不匹配会沿着继承关系向上递归查找。递归到根就变成nil，表示当前key在该子树序列里没存。</p><h4 id=cancelctx>cancelCtx</h4><p>介绍完上面两种比较简单的结构后，终于要来到复杂的cancelCtx。cancelCtx和timerCtx关联性很强，基本上弄懂一个，另外一个也差不多了。</p><p><strong>对外方法</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><p>从实现上可以看出，每当我们往ctx里调WithValue塞值时，都会生成一个新的子节点。调用的次数多了，生成的子树就很庞大。</p><p><img class=lazyload src=/svg/loading.min.svg data-src=/posts/go-context/640-20221028103425741.png data-srcset="/posts/go-context/640-20221028103425741.png, /posts/go-context/640-20221028103425741.png 1.5x, /posts/go-context/640-20221028103425741.png 2x" data-sizes=auto alt=/posts/go-context/640-20221028103425741.png title=图片 width=1080 height=654></p><p>若当前节点的key和传入的key不匹配会沿着继承关系向上递归查找。递归到根就变成nil，表示当前key在该子树序列里没存。</p><h4 id=cancelctx>cancelCtx</h4><p>介绍完上面两种比较简单的结构后，终于要来到复杂的cancelCtx。cancelCtx和timerCtx关联性很强，基本上弄懂一个，另外一个也差不多了。</p><p><strong>对外方法</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -663,7 +681,7 @@
 </span></span><span class=line><span class=cl>      <span class=p>}()</span>
 </span></span><span class=line><span class=cl>   <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=/posts/context/640-20221028103920498.png data-srcset="/posts/context/640-20221028103920498.png, /posts/context/640-20221028103920498.png 1.5x, /posts/context/640-20221028103920498.png 2x" data-sizes=auto alt=/posts/context/640-20221028103920498.png title=图片 width=764 height=778></p><p>①当祖先继承链里没有cancelCtx或timerCtx等实现时，Done()方法总是返回nil，可以作为前置判断。</p><p>②parentCancelCtx取的是可以取消的最近祖先节点。</p><p><strong>总结</strong></p><p>总结一下，cancelCtx的作用其实就两个：</p><ul><li><p>绑定父子节点，同步取消信号，父节点取消子节点也跟着取消。</p></li><li><p>提供主动取消函数。</p></li></ul><h4 id=timerctx>timerCtx</h4><p><strong>结构体</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=/posts/go-context/640-20221028103920498.png data-srcset="/posts/go-context/640-20221028103920498.png, /posts/go-context/640-20221028103920498.png 1.5x, /posts/go-context/640-20221028103920498.png 2x" data-sizes=auto alt=/posts/go-context/640-20221028103920498.png title=图片 width=764 height=778></p><p>①当祖先继承链里没有cancelCtx或timerCtx等实现时，Done()方法总是返回nil，可以作为前置判断。</p><p>②parentCancelCtx取的是可以取消的最近祖先节点。</p><p><strong>总结</strong></p><p>总结一下，cancelCtx的作用其实就两个：</p><ul><li><p>绑定父子节点，同步取消信号，父节点取消子节点也跟着取消。</p></li><li><p>提供主动取消函数。</p></li></ul><h4 id=timerctx>timerCtx</h4><p><strong>结构体</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -755,5 +773,6 @@
 </span></span><span class=line><span class=cl>   <span class=p>}</span>
 </span></span><span class=line><span class=cl>   <span class=k>return</span> <span class=nx>c</span><span class=p>,</span> <span class=kd>func</span><span class=p>()</span> <span class=p>{</span> <span class=nx>c</span><span class=p>.</span><span class=nf>cancel</span><span class=p>(</span><span class=kc>true</span><span class=p>,</span> <span class=nx>Canceled</span><span class=p>)</span> <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=四总结>四、总结</h2><p>综上所述，Context的主要功能就是用于控制协程退出和附加链路信息。核心实现的结构体有4个，最复杂的是cancelCtx，最常用的是cancelCtx和valueCtx。整体呈树状结构，父子节点间同步取消信号。</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2022-10-28</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/context/>context</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/grpc/ class=prev rel=prev title=grpc><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>grpc</a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Zefrawendi</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</span></span></code></pre></td></tr></table></div></div><h2 id=四总结>四、总结</h2><p>综上所述，context的主要功能就是用于控制协程退出和附加链路信息。核心实现的结构体有4个，最复杂的是cancelCtx，最常用的是cancelCtx和valueCtx。整体呈树状结构，父子节点间同步取消信号。</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2022-10-28</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/context/>context</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/grpc/ class=prev rel=prev title=grpc><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>grpc</a>
+<a href=/posts/go%E6%89%A7%E8%A1%8Cshell%E5%91%BD%E4%BB%A4/ class=next rel=next title=go执行shell命令>go执行shell命令<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank>Zefrawendi</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
 </a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.13.1/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/typeit@8.6.0/dist/index.umd.js></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:50},comment:{},data:{"id-1":"虚无空间","id-2":"虚无空间"},search:{algoliaAppID:"UUU68T8E14",algoliaIndex:"hugo",algoliaSearchKey:"61f9c4a232b684d32d4de9bff58d4997",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:30,type:"algolia"},typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"id-1":["id-1"],"id-2":["id-2"]},duration:-1,speed:100}}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
